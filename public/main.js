@@ -65,6 +65,46 @@
     }, { threshold: 0.35 });
     vio.observe(sv);
   }
+  /* Wave field: the logo's three strokes, flowing. Gold on every seventh line. Still under reduced motion. */
+  function waves(canvas, opts) {
+    if (!canvas || !canvas.getContext) return;
+    opts = opts || {};
+    var still = !motionOK || !!opts.still;
+    var ctx = canvas.getContext('2d'), w, h, dpr, t = 0, mx = .5, raf = 0, vis = true;
+    var lines = opts.lines || 22, inkMode = !!opts.ink, host = opts.host;
+    function size() {
+      if (host) canvas.style.height = host.offsetHeight + 'px';
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (still) frame();
+    }
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      var base = h * (opts.base || .62), spread = h * (opts.spread || .34);
+      for (var i = 0; i < lines; i++) {
+        var p = i / (lines - 1), y0 = base + (p - .5) * spread * (1 + p * .9);
+        var amp = (10 + p * 34) * (.7 + mx * .9) * (opts.amp || 1), f = .0022 + p * .0011, sp = t * (.45 + p * .4);
+        ctx.beginPath();
+        for (var x = -10; x <= w + 10; x += 14) {
+          var y = y0 + Math.sin(x * f + sp + i * .35) * amp + Math.sin(x * f * 2.3 - sp * 1.3) * amp * .35;
+          if (x === -10) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        var a = .05 + p * .22;
+        ctx.strokeStyle = inkMode ? 'rgba(12,15,16,' + (a + .2) + ')' : (i % 7 === 0 ? 'rgba(216,162,60,' + (a + .35) + ')' : 'rgba(238,234,223,' + a + ')');
+        ctx.lineWidth = i % 7 === 0 ? 1.6 : 1;
+        ctx.stroke();
+      }
+    }
+    function loop() { if (!vis) { raf = 0; return; } t += .016; frame(); raf = still ? 0 : requestAnimationFrame(loop); }
+    size(); window.addEventListener('resize', size);
+    if (!still) window.addEventListener('pointermove', function (e) { mx += ((e.clientX / window.innerWidth) - mx) * .08; }, { passive: true });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { vis = en[0].isIntersecting; if (vis && !raf && !still) loop(); }).observe(canvas);
+    still ? frame() : loop();
+  }
+  waves(document.getElementById('waves'), { lines: 22, base: .78, spread: .3, host: document.querySelector('.hero .surface') });
+  waves(document.getElementById('wavesCta'), { lines: 16, base: .6, spread: .5, amp: .8, ink: true, still: true });
   /* Instagram embeds: load Instagram's script only when a video is near the screen. */
   var igs = document.querySelectorAll('.ig-embed');
   if (igs.length) {
