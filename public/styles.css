@@ -453,3 +453,12 @@ html.motion .board-grid.in .acard{animation:rise .5s var(--curve) both;animation
 #waves{position:absolute;left:0;top:0;width:100%;height:60%;z-index:-1;pointer-events:none}
 .close{position:relative;isolation:isolate}
 #wavesCta{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+/* Home record: four figures and the Cairns DNF */
+.hl4{display:grid;grid-template-columns:repeat(2,1fr);border-top:2px solid var(--ink)}
+.hl4>div{padding:18px 16px 18px 0;border-bottom:1px solid var(--rule)}
+.hl4 .num{display:block;font-size:clamp(44px,5vw,76px);line-height:.95}
+.hl4 span{display:block;margin-top:8px;font-weight:600;font-size:17px;line-height:1.2}
+.dnfcall{display:grid;grid-template-columns:auto 1fr;gap:20px;margin-top:26px;padding-top:20px;border-top:2px solid var(--ink)}
+.dnfcall .num{font-size:clamp(34px,3.6vw,52px);line-height:.95;color:var(--gold-ink)}
+.dnfcall h3{margin-bottom:6px}
+.dnfcall .turn{font-weight:700;margin-top:8px}
