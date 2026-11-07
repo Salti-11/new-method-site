@@ -1,0 +1,8 @@
+{
+  "name": "method-endurance-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Method Endurance website: static pages served with clean URLs.",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
