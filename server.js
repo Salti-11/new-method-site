@@ -39,7 +39,7 @@ http.createServer((req, res) => {
   }
   const ext = path.extname(file);
   headers['Content-Type'] = TYPES[ext] || 'application/octet-stream';
-  headers['Cache-Control'] = ext === '.html' || ext === '.xml' || ext === '.txt' ? 'no-cache' : 'public, max-age=86400';
+  headers['Cache-Control'] = ['.html', '.xml', '.txt', '.css', '.js'].includes(ext) ? 'no-cache' : 'public, max-age=86400';
   if (ext === '.mp4') {
     const size = fs.statSync(file).size, range = req.headers.range;
     if (range) {
